@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="theme-color" content="#0c0c0f"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Vault"/>
+  <title>Vault</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="splash-mark">V</div>
+    <div class="splash-label">VAULT</div>
+  </div>
+
+  <!-- HOME: SECTIONS LIST -->
+  <div id="viewHome" class="view active">
+    <header class="topbar">
+      <span class="topbar-title">VAULT</span>
+      <div class="topbar-actions">
+        <button class="tb-btn" id="btnOpenSettings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+        <button class="tb-btn tb-btn-accent" id="btnAddSection">+</button>
+      </div>
+    </header>
+    <div id="sectionsList" class="sections-list"></div>
+    <div id="emptySections" class="empty-view">
+      <div class="empty-char">[ ]</div>
+      <p>Sin secciones</p>
+      <span>Toca <strong>+</strong> para crear una</span>
+    </div>
+  </div>
+
+  <!-- SECTION VIEW: ITEMS LIST -->
+  <div id="viewSection" class="view">
+    <header class="topbar">
+      <button class="tb-btn" id="btnBack">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="topbar-title" id="sectionTitle">Sección</span>
+      <div class="topbar-actions">
+        <button class="tb-btn" id="btnEditSection">✎</button>
+        <button class="tb-btn tb-btn-accent" id="btnAddItem">+</button>
+      </div>
+    </header>
+    <div id="itemsList" class="items-list"></div>
+    <div id="emptyItems" class="empty-view">
+      <div class="empty-char">{ }</div>
+      <p>Sección vacía</p>
+      <span>Toca <strong>+</strong> para agregar un link</span>
+    </div>
+  </div>
+
+  <!-- ===== SHEETS ===== -->
+
+  <!-- Add/Edit Section -->
+  <div class="overlay" id="sheetSection">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="sheetSectionTitle">Nueva sección</div>
+      <div class="field">
+        <label>Nombre de la sección</label>
+        <input type="text" id="inp-section-name" placeholder="Ej. Videos, Recetas, Trabajo..." maxlength="32" autocomplete="off"/>
+      </div>
+      <div id="deleteSectionWrap" style="display:none">
+        <button class="btn-danger-full" id="btnDeleteSection">Eliminar sección y todo su contenido</button>
+      </div>
+      <button class="btn-primary" id="btnSaveSection">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Item -->
+  <div class="overlay" id="sheetItem">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="sheetItemTitle">Nuevo link</div>
+      <div class="field">
+        <label>Título</label>
+        <input type="text" id="inp-item-title" placeholder="Nombre del link..." maxlength="80" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="url" id="inp-item-url" placeholder="https://..." autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label>Imagen (opcional)</label>
+        <div class="img-tabs">
+          <button class="itab active" data-tab="url">URL</button>
+          <button class="itab" data-tab="file">Subir foto</button>
+        </div>
+        <div id="itab-url">
+          <input type="url" id="inp-item-img" placeholder="https://imagen..." autocomplete="off"/>
+        </div>
+        <div id="itab-file" style="display:none">
+          <label class="file-area" for="inp-item-img-file">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="item-file-label">Toca para elegir imagen</span>
+            <input type="file" id="inp-item-img-file" accept="image/*"/>
+          </label>
+        </div>
+        <div id="item-img-preview-wrap" style="display:none">
+          <img id="item-img-preview" class="thumb-preview"/>
+          <button class="btn-clear" id="btnClearItemImg">✕</button>
+        </div>
+      </div>
+      <button class="btn-primary" id="btnSaveItem">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="overlay" id="sheetSettings">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Ajustes</div>
+      <div class="field">
+        <label>Nombre de la app</label>
+        <input type="text" id="inp-app-name" placeholder="Vault" maxlength="24" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label>Color de acento</label>
+        <div class="color-grid" id="colorGrid"></div>
+        <div class="custom-color-row">
+          <span>Color personalizado</span>
+          <input type="color" id="inp-accent-color" class="color-picker"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Copia de seguridad</label>
+        <button class="btn-secondary" id="btnExport">↓ Exportar</button>
+        <button class="btn-secondary btn-secondary-accent" id="btnImport" style="margin-top:8px">↑ Importar</button>
+        <input type="file" id="inp-backup" accept=".json" style="display:none"/>
+        <div class="backup-hint" id="backupHint"></div>
+      </div>
+      <button class="btn-primary" id="btnSaveSettings">Guardar ajustes</button>
+    </div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
